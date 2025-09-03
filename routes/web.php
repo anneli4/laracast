@@ -1,61 +1,26 @@
 <?php
 
+use Illuminate\Contracts\Queue\Job as QueueJob;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Js;
+use App\Models\job;
+
 
 Route::get('/', function () {
     return view('home');
 });
-Route::get('/jobs', function () {
-return view('jobs',[
-        'jobs' => [
-            [
-                'id' => 1,
-                'title' => 'Boss',
-                'salary' => '50 000'
-            ],
-             [
-                'id' => 2,
-                'title' => 'Programmer',
-                'salary' => '50 000'
-             ],
-             [
-                'id' => 3,
-                'title' => 'Teacher',
-                'salary' => '50 000'
-             ],
-        ]
+
+Route::get('/jobs', function ()  {
+return view('jobs' , [
+        'jobs' =>  job::all()
     ]);
 });
+
 Route::get('/jobs/{id}', function ($id) {
-     $jobs = [
-            [
-                'id' => 1,
-                'title' => 'Boss',
-                'salary' => '50 000'
-            ],
-             [
-                'id' => 2,
-                'title' => 'Programmer',
-                'salary' => '50 000'
-             ],
-             [
-                'id' => 3,
-                'title' => 'Teacher',
-                'salary' => '50 000'
-             ],
-        ];
-
-        $job = Arr::first($jobs, function ($job) use ($id) {
-            return $job['id'] == $id;
-
-
-        });
-
-        return view('job', ['job' => $job]);
-
+    $job = job::find($id);
+    return view('job', ['job' => $job]);
 });
-
 
 Route::get('/contact', function () {
     return view('contact');
